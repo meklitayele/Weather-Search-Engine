@@ -17,6 +17,26 @@ function displayTemperature(response) {
 
 }
 
+function displayForecast(response){
+ 
+  
+    let forecastData = response.data.daily;
+    let dayIcons = document.querySelectorAll(".dayicons");
+
+    forecastData.forEach((day, index) => {
+      let iconURL= condition.icon_URL;
+      let iconElement=dayIcons[index];
+
+      if (iconURL && iconElement) {
+        iconElement.setAttribute("src",iconURL);
+      }
+    });
+  
+
+
+
+}
+
 function search(event) {
   event.preventDefault();
   let searchInputElement = document.querySelector("#search-input");
@@ -24,9 +44,14 @@ function search(event) {
 
   let apiKey = "b2a5adcct04b33178913oc335f405433";
   let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
-
+  let apiURL=`https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=metric`;
+  
   axios.get(apiUrl).then(displayTemperature);
+  axios.get(apiURL)
+    .then(displayForecast)
+    .catch(error => console.error("Error fetching forecast:", error));
 }
+
 
 function formatDate(date) {
   let minutes = date.getMinutes();
